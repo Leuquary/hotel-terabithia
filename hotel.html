@@ -398,11 +398,12 @@
             gasolina_wayne = validar_valor_numerico("Qual o valor da gasolina no posto Wayne Oil?");
             alcool_stack = validar_valor_numerico("Qual o valor do álcool no posto Stark Petrol?");
             gasolina_stack = validar_valor_numerico("Qual o valor da gasolina no posto Stark Petrol?");
+            var combustive = {valor: 0.0, tipo: "", posto: ""};
 
             var menorGasolina = Math.min(gasolina_stack,gasolina_wayne);
             var menorAlcool = Math.min(alcool_stack,alcool_wayne);
-            var porcentagem = menorGasolina*0.3;
-
+            var porcentagem = menor_gasolina*0.3;
+            
             if(menorAlcool<menorGasolina){
                 var diferenca = menorGasolina - menorAlcool;
                 if(porcentagem<=diferenca){
@@ -415,6 +416,10 @@
             }
 
         }   
+
+        function maior_valor_combustivel(combustivel){
+
+        }
 
         function erro(){
             alert("Valor inválido");
