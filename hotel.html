@@ -17,7 +17,7 @@
         function inicio(){
             alert("Bem vindo ao Hotel "+nome_hotel+", "+nome_usuario+" é um imenso prazer ter você aqui!");
 
-            var escolha = parseInt(prompt("Escolha uma das opções abaixo:\n\n1. Hospedagem \n2. Cadastrar hóspedes \n3. Manter cadastro de hóspedes \n4. Agendar evento \n5. Gasolina e Álcool \n6. Orçamento de aparelhos"));
+            var escolha = parseInt(prompt("Escolha uma das opções abaixo:\n\n1. Hospedagem \n2. Cadastrar hóspedes \n3. Manter cadastro de hóspedes \n4. Agendar evento \n5. Gasolina e Álcool \n6. Orçamento de aparelhos \n7. Sair"));
             switch(escolha){
                 case 1: hospedagem();
                     break;
@@ -27,9 +27,11 @@
                     break;
                 case 4: eventos();
                     break;
-                case 5: calcular_custo_combustivel();
+                case 5: calcular_combustivel();
                     break;
                 case 6: calcular_orcamento();
+                    break;
+                case 7: sair();
                     break;
                 default: erro();
                     break;
@@ -62,7 +64,6 @@
                         quartos = JSON.parse(sessionStorage.getItem("lista_quartos"));
                     }else{
                         sessionStorage.setItem("lista_quartos",JSON.stringify(quartos));
-                        alert("criado");
                     }
                 }else{
                     alert("Valor inválido.");
@@ -77,7 +78,7 @@
             if(confirma){
                 quartos[quarto] = false;
                 sessionStorage.setItem("lista_quartos",JSON.stringify(quartos));
-                alert(nome_usuario+", reserva efetuada para "+nome_hospede+" "+quartos[quarto]);
+                alert(nome_usuario+", reserva efetuada para "+nome_hospede);
             }
 
             inicio();
@@ -394,38 +395,52 @@
         }
 
         function calcular_combustivel(){
-            alcool_wayne = validar_valor_numerico("Qual o valor do álcool no posto Wayne Oil?");
-            gasolina_wayne = validar_valor_numerico("Qual o valor da gasolina no posto Wayne Oil?");
-            alcool_stack = validar_valor_numerico("Qual o valor do álcool no posto Stark Petrol?");
-            gasolina_stack = validar_valor_numerico("Qual o valor da gasolina no posto Stark Petrol?");
-            var combustive = {valor: 0.0, tipo: "", posto: ""};
+            var gasolina_wayne = {valor:0.0,posto:"Wayne Oil"};
+            var gasolina_stark = {valor:0.0,posto:"Stack Petrol"};
+            var alcool_wayne = {valor:0.0,posto:"Wayne Oil"};
+            var alcool_stark = {valor:0.0,posto:"Stark Petrol"};
 
-            var menorGasolina = Math.min(gasolina_stack,gasolina_wayne);
-            var menorAlcool = Math.min(alcool_stack,alcool_wayne);
-            var porcentagem = menor_gasolina*0.3;
+            alcool_wayne.valor = validar_valor_numerico("Qual o valor do álcool no posto Wayne Oil?");
+            gasolina_wayne.valor = validar_valor_numerico("Qual o valor da gasolina no posto Wayne Oil?");
+            alcool_stark.valor = validar_valor_numerico("Qual o valor do álcool no posto Stark Petrol?");
+            gasolina_stark.valor = validar_valor_numerico("Qual o valor da gasolina no posto Stark Petrol?");
             
-            if(menorAlcool<menorGasolina){
-                var diferenca = menorGasolina - menorAlcool;
+            var menor_gasolina = menor_combustivel(gasolina_stark,gasolina_wayne);
+            var menor_alcool = menor_combustivel(alcool_stark,alcool_wayne);
+            var porcentagem = menor_gasolina.valor*0.3;
+            
+            if(menor_alcool<menor_gasolina){
+                var diferenca = menor_gasolina - menor_alcool;
                 if(porcentagem<=diferenca){
-                    alert("Melhor usar álcool "+menorAlcool);
+                    alert(nome_usuario+" É mais barato abastecer com álcool no posto "+menor_alcool.posto+" R$"+menor_alcool.valor);
                 }else{
-                    alert("Melhor usar gasolina "+menorGasolina);
+                    alert(nome_usuario+" É mais barato abastecer com gasolina no posto "+menor_alcool.posto+" R$"+menor_gasolina.valor);
                 }
             }else{
-                alert("Melhor usar gasolina "+menorGasolina);
+                alert(nome_usuario+" É mais barato abastecer com gasolina no posto "+menor_alcool.posto+" R$"+menor_gasolina.valor);
             }
-
+            inicio();
         }   
 
-        function maior_valor_combustivel(combustivel){
-
+        function menor_combustivel(posto1,posto2){
+            if(posto1.valor<posto2.valor){
+                return posto1;
+            }else{
+                return posto2;
+            }
         }
 
         function erro(){
             alert("Valor inválido");
             inicio();
         }
-        calcular_combustivel();
+
+        function sair(){
+            alert("Muito obrigado e até logo, "+nome_usuario);
+            window.close();
+        }
+
+        inicio();
     </script>
 </body>
 </html>
